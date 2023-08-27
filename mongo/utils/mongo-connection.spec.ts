@@ -27,6 +27,10 @@ describe("mongoDbConnection", () => {
       result = mongoDbConnection(args);
    })
 
+   afterAll(async () => {
+      result.client.close()
+   })
+
    describe("init and client is always returned", () => {
 
       test("returns init", () => {
