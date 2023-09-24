@@ -36,7 +36,8 @@ export const getProjectModel = (logger: CustomLogger) => {
       indexes: [
          {
             key: { slug: 1, user: 1 },
-            name: 'slug1User1',
+            name: 'uniqueSlug1User1',
+            unique: true
          },
       ],
    });
