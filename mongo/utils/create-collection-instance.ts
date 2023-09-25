@@ -5,6 +5,6 @@ export const createCollectionInstance = <T>(
    collectionName: string,
    logger: CustomLogger,
 ) => {
-   const client = mongoDbConnection({ logger }).client;
+   const client = mongoDbConnection(logger).client;
    return client.db().collection<T>(collectionName);
 };
