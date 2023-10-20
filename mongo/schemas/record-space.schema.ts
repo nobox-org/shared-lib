@@ -48,8 +48,7 @@ export const getRecordSpaceModel = (logger: CustomLogger) => {
       indexes: [
          {
             key: { slug: 1, projectSlug: 1, user: 1 },
-            name: 'unique_slug1-projectSlug1-user1',
-            unique: true
+            name: 'slug1-projectSlug1-user1',
          },
       ],
    });
