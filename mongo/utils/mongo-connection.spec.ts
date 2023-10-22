@@ -46,7 +46,7 @@ describe("mongoDbConnection", () => {
       let collection: any, insert: any, found: any;
 
       beforeAll(async () => {
-         collection = createCollectionInstance<{ _id: ObjectId, a: string }>("akin", args.logger);
+         collection = createCollectionInstance<{ _id: ObjectId, a: string }>("akin", result.client);
          insert = await collection.insertOne({ _id: new ObjectId(), a: "2" });
          found = await collection.findOne({ _id: insert.insertedId });
       })
@@ -62,6 +62,14 @@ describe("mongoDbConnection", () => {
 
       test("find works", () => {
          expect(found.a).toEqual("2");
+      })
+   })
+
+   describe("collectionInstance uses cached connection always", () => {
+      test("connection options was set", () => {
+         const { connectionOptions } = result;
+
+         expect(connectionOptions).toMatchObject({ ...args, logAll: false })
       })
    })
 })

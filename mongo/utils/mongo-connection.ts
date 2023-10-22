@@ -1,16 +1,15 @@
 import { MongoClient } from 'mongodb';
-import { CustomLogger } from '../../types';
+import { MongoDbConnectionArgs } from '../../types';
+
+
 
 let cachedConnection: MongoClient;
 let acquiringConnection = false;
+let connectionOptions: MongoDbConnectionArgs;
 
-export const mongoDbConnection = (args: {
-   connOptions?: Record<string, boolean>;
-   connString?: string;
-   logger?: CustomLogger;
-   logAll?: boolean;
-}) => {
+export const mongoDbConnection = (args: MongoDbConnectionArgs) => {
    const { logger, connString, connOptions, logAll = false } = args;
+
    const connectToMongoServer = (args?: {
       init: boolean;
       restart?: boolean;
@@ -42,6 +41,14 @@ export const mongoDbConnection = (args: {
             logger.sLog({}, 'mongoDbConnection:: MongoDb connection created');
          });
          cachedConnection = client;
+
+         connectionOptions = {
+            logger,
+            connString,
+            connOptions,
+            logAll
+         };
+
          return cachedConnection;
       } catch (error) {
          logger.sLog({ error }, 'mongoDbConnection:: MongoDb connection error');
@@ -54,5 +61,6 @@ export const mongoDbConnection = (args: {
          connectToMongoServer({ init: true });
       },
       client: connectToMongoServer(),
+      connectionOptions,
    };
 };

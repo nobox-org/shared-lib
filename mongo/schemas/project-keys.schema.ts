@@ -6,7 +6,6 @@ const collectionName = 'project-keys';
 
 export interface Postmark {
    apiKey: string;
-
    senderEmail: string;
 }
 

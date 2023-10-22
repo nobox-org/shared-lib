@@ -1,10 +1,8 @@
-import { CustomLogger } from '../../types';
-import { mongoDbConnection } from './mongo-connection';
+import { MongoClient } from 'mongodb';
 
 export const createCollectionInstance = <T>(
    collectionName: string,
-   logger: CustomLogger,
+   client?: MongoClient
 ) => {
-   const client = mongoDbConnection({ logger }).client;
    return client.db().collection<T>(collectionName);
 };

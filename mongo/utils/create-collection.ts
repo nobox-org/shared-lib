@@ -13,6 +13,7 @@ import {
 import { redisConnection, redisUtils } from '../../redis_';
 import { createCollectionInstance } from './create-collection-instance';
 import { CustomLogger } from '../../types';
+import { mongoDbConnection } from './mongo-connection';
 
 export const allowedCollection = ['projects', 'records'];
 
@@ -28,13 +29,17 @@ export const collection = <T>(
 ) => {
    const { addDates = true, indexes = null } = option || {};
 
+   const { client, connectionOptions: { logAll } } = mongoDbConnection({ logger: _logger })
+
    const collectionInstance = createCollectionInstance<T>(
       collectionName,
-      _logger,
+      client
    );
+
    if (indexes) {
       collectionInstance.createIndexes(indexes);
    }
+
    const hashKey = collectionName;
    const redisClient = ({} as any) || (redisConnection(_logger).client as any);
 
@@ -69,6 +74,7 @@ export const collection = <T>(
          options,
       );
       invalidateCache({ via: 'updateOne' });
+
       logger.sLog(
          { status },
          `directMongodbConnection::${collectionName}::updateOrCreateOne status`,
@@ -167,13 +173,16 @@ export const collection = <T>(
       const redisPrimaryKey =
          'findOne' + JSON.stringify({ filter, findOptions });
       const cacheValue = await retrieveCache<WithId<T>>(redisPrimaryKey);
+
       logger.sLog(
          { cacheValue, redisPrimaryKey, collectionName },
          'findOne::cacheValue',
       );
+
       if (cacheValue) {
          return cacheValue;
       }
+
       const result = await collectionInstance.findOne(filter);
       updateCache(redisPrimaryKey, JSON.stringify(result));
       return result;

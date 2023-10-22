@@ -13,6 +13,13 @@ export interface MTokens {
    forgotPassword?: string;
 }
 
+export interface ApiToken {
+   createdOn: Date;
+   expired: boolean;
+   expiredOn?: boolean;
+   token: string;
+}
+
 export interface MUser extends MBase {
    email: string;
 
@@ -27,9 +34,19 @@ export interface MUser extends MBase {
    gender?: Gender;
 
    tokens?: MTokens;
+
+   apiToken?: ApiToken;
 }
 
 export const getUserModel = (logger: CustomLogger) => {
-   const col = collection<MUser>(collectionName, logger);
+   const col = collection<MUser>(collectionName, logger, {
+      indexes: [
+         {
+            key: { apiToken: 1, _id: 1 },
+            name: 'unique_apiToken_id',
+            unique: true
+         },
+      ],
+   });
    return col;
 };

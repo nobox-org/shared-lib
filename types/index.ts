@@ -31,3 +31,10 @@ export enum NodeEnvironment {
     Staging = "staging",
     Production = "prod"
 }
+
+export interface MongoDbConnectionArgs {
+    connOptions?: Record<string, boolean>;
+    connString?: string;
+    logger?: CustomLogger;
+    logAll?: boolean;
+}
