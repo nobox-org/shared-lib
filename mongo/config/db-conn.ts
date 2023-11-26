@@ -27,9 +27,7 @@ export const connString = `${MONGO_PROTOCOL}://${authSection}${MONGO_HOST}${MONG
 
 export const connOptions: Record<string, boolean> = {
    useUnifiedTopology: true,
-   useNewUrlParser: true,
-   // useFindAndModify: false,
-   // useCreateIndex: true,
+   useNewUrlParser: true
 };
 
 export const full: NonEmptyArray<string | Record<string, boolean>> = [
